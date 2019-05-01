@@ -8,7 +8,7 @@ body {
  * Formatting the header area
  */
 header {
-  background-color: #DFB887;
+  background-color: #000000;
   height: 35px;
   width: 100%;
   opacity: .9;
@@ -22,7 +22,7 @@ header h1.logo {
   float: left;
 }
 header h1.logo:hover {
-  color: #fff;
+  color: #69e059;
   text-decoration: none;
 }
 /*
@@ -71,7 +71,7 @@ h3 {
   margin-left: 35px;
 }
 .menu li a {
-  color: #444;
+  color: #fff;
   text-decoration: none;
 }
 
