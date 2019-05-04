@@ -8,7 +8,7 @@ body {
  * Formatting the header area
  */
 header {
-  background-color: #000000;
+  background-color: #D3D3D3;
   height: 35px;
   width: 100%;
   opacity: .9;
@@ -100,7 +100,7 @@ h3 {
   margin-top: 30px;
   text-align: center;
   letter-spacing: -1px;
-  color: #999;
+  color: #00000;
 }
 .menu {
   float: right;
@@ -113,7 +113,7 @@ h3 {
   margin-left: 35px;
 }
 .menu li a {
-  color: #fff;
+  color: #00000;
 }
 .menu li a:hover {
   color: #69e059;

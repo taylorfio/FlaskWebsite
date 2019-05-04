@@ -3,7 +3,12 @@
  <head>
      <title>Flask app</title>
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     {% if color == 'light'%}
      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+     {% elif color == 'dark' %}
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_dark.css') }}">
+     {% endif %}
+
  </head>
   <body>
     <header>
@@ -14,6 +19,7 @@
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
+              <li><a href="{{ url_for('colourmode') }}">Darkmode</a></li>
           </ul>
         </nav></strong>
       </div>

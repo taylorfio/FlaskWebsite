@@ -3,6 +3,14 @@ from flask import Flask, render_template, Response, redirect, url_for, request
 from camara import VideoCamera
 
 app = Flask(__name__)
+colour = 'light'
+
+
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 @app.route('/')
@@ -37,17 +45,26 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
-
 @app.route('/about')
 def about():
     return render_template('about.html')
 
 
+@app.route('/colourmode')
+def colourmode():
+    global colour
+    if colour == 'light':
+        colour = 'dark'
+        return render_template('home.html', color=colour)
+    elif colour == 'dark':
+        colour = 'light'
+        return render_template('home.html', color=colour)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+
+# add login blocker
+# add colour mode
+
+# use command ./ngrok http 5000
