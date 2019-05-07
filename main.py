@@ -1,7 +1,8 @@
 # https://pythonhow.com/how-a-flask-app-works/
-from flask import Flask, render_template, Response, redirect, url_for, request, flash
+from flask import Flask, render_template, Response, redirect, url_for, request
 from camara import VideoCamera
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
+import hashlib
 
 app = Flask(__name__)
 
@@ -18,34 +19,27 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id, "temp")
+
+
 class User(UserMixin):
-    # proxy for a database of users
-    user_database = {"JohnDoe": ("JohnDoe", "John"),
-               "JaneDoe": ("JaneDoe", "Jane")}
+    def __init__(self, id, username):
+        self.username = username
+        self.id = id
 
-    def __init__(self, username, password):
-        self.id = username
-        self.password = password
+    def is_authenticated(self):
+        return True
 
-    @classmethod
-    def get(cls,id):
-        return cls.user_database.get(id)
+    def is_active(self):
+        return True
 
+    def is_anonymous(self):
+        return False
 
-@login_manager.request_loader
-def load_user(request):
-    token = request.headers.get('Authorization')
-    if token is None:
-        token = request.args.get('token')
-
-    if token is not None:
-        username, password = token.split(":")  # naive token
-        user_entry = User.get(username)
-        if user_entry is not None:
-            user = User(user_entry[0], user_entry[1])
-            if user.password == password:
-                return user
-    return None
+    def get_id(self):
+        return self.id
 
 
 @app.route('/')
@@ -60,14 +54,42 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
+            login_user(User(0, password))
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
+
+
+
+[0]
+"""
+
+try:  # opens the files to read to see if a username exists and write new usernames and passwords
+    file = open("user.txt", "r")
+except IOError:
+    print("can't find password file")
+
+temp_list = sign_in()  # calls the function
+account_username = request.form['username'] # the first part of the list is the username input
+
+hasher = hashlib.md5()  # the hasher import is called
+hasher.update(request.form['password']('utf-8'))  # the hasher is hashing the password input from the list
+password = hasher.hexdigest()  # the hashed password is linked to account_password string
+
+"""
+
+
+
+
+
+
+
 
 
 
 @app.route('/logout')
 @login_required
 def logout():
+    logout_user()
     return redirect(url_for('login'))
 
 
