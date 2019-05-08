@@ -3,6 +3,11 @@
  <div class="home">
     <h1>Python Web Streaming</h1>
     <p>This website was built with Python via the Flask framework.</p>
+     <form action="" method="post">
+         <input class="btn btn-default" type="submit" value="Left">
+         <input class="btn btn-default" type="submit" value="Right">
+         <input class="btn btn-default" type="submit" value="Fire">
+     </form>
      <img id="bg" src="{{ url_for('video_feed') }}">
   </div>
 {% endblock %}

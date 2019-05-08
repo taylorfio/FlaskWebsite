@@ -1,18 +1,9 @@
-# https://pythonhow.com/how-a-flask-app-works/
 from flask import Flask, render_template, Response, redirect, url_for, request
-from camara import VideoCamera
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 import hashlib
+from camara import VideoCamera
 
 app = Flask(__name__)
-
-
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
 
 # flask-login
 login_manager = LoginManager()
@@ -29,18 +20,6 @@ class User(UserMixin):
         self.username = username
         self.id = id
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.id
-
 
 @app.route('/')
 def gotologin():
@@ -50,40 +29,26 @@ def gotologin():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    global file_password, file_user
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+
+        try:
+            file = open("user.txt", "r")
+            file_user = file.readlines(1)
+            file_password = file.readlines(0)
+        except IOError:
+            print("can't find password file")
+
+        hasher = hashlib.md5()  # the hasher import is called
+        hasher.update(request.form['password'].encode('utf-8'))  # the hasher is hashing the password input from the list
+        password = hasher.hexdigest()  # the hashed password is linked to account_password string
+
+        if request.form['username'] != file_user[0].strip() or password != file_password[0].strip():
             error = 'Invalid Credentials. Please try again.'
         else:
-            login_user(User(0, password))
+            login_user(User(0, 'admin'))
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
-
-
-
-[0]
-"""
-
-try:  # opens the files to read to see if a username exists and write new usernames and passwords
-    file = open("user.txt", "r")
-except IOError:
-    print("can't find password file")
-
-temp_list = sign_in()  # calls the function
-account_username = request.form['username'] # the first part of the list is the username input
-
-hasher = hashlib.md5()  # the hasher import is called
-hasher.update(request.form['password']('utf-8'))  # the hasher is hashing the password input from the list
-password = hasher.hexdigest()  # the hashed password is linked to account_password string
-
-"""
-
-
-
-
-
-
-
-
 
 
 @app.route('/logout')
@@ -97,6 +62,13 @@ def logout():
 @login_required
 def home():
     return render_template('home.html')
+
+
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 @app.route('/video_feed')
@@ -115,8 +87,5 @@ def about():
 if __name__ == '__main__':
     app.config["SECRET_KEY"] = 'ITSASECRET'
     app.run(host='0.0.0.0', debug=True)
-
-# add login blocker
-# add colour mode
 
 # use command ./ngrok http 5000
