@@ -1,6 +1,8 @@
 from flask import Flask, render_template, Response, redirect, url_for, request
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 import hashlib
+import RPi.GPIO as gpio
+import time
 from camara import VideoCamera
 
 app = Flask(__name__)
@@ -8,6 +10,43 @@ app = Flask(__name__)
 # flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+
+def init():
+    gpio.setmode(gpio.BCM)
+    gpio.setup(21, gpio.OUT)
+    gpio.setup(17, gpio.OUT)
+    gpio.setup(22, gpio.OUT)
+    gpio.setup(23, gpio.OUT)
+    gpio.setup(24, gpio.OUT)
+
+
+def forward(sec):
+    init()
+    gpio.output(17, True)
+    gpio.output(22, False)
+    gpio.output(23, True)
+    gpio.output(24, False)
+    time.sleep(sec)
+    gpio.cleanup()
+
+
+def reverse(sec):
+    init()
+    gpio.output(17, False)
+    gpio.output(22, True)
+    gpio.output(23, False)
+    gpio.output(24, True)
+    time.sleep(sec)
+    gpio.cleanup()
+
+
+def motor_on(pin):
+    gpio.output(pin, gpio.HIGH)  # Turn motor on
+
+
+def motor_off(pin):
+    gpio.output(pin, gpio.LOW)  # Turn motor off
 
 
 @login_manager.user_loader
@@ -40,7 +79,8 @@ def login():
             print("can't find password file")
 
         hasher = hashlib.md5()  # the hasher import is called
-        hasher.update(request.form['password'].encode('utf-8'))  # the hasher is hashing the password input from the list
+        hasher.update(
+            request.form['password'].encode('utf-8'))  # the hasher is hashing the password input from the list
         password = hasher.hexdigest()  # the hashed password is linked to account_password string
 
         if request.form['username'] != file_user[0].strip() or password != file_password[0].strip():
@@ -63,11 +103,15 @@ def logout():
 def home():
     if request.method == 'POST':
         if request.form['left']:
-            ""
+            reverse(1)
         elif request.form['right']:
-            ""
+            forward(1)
         elif request.form['fire']:
-            ""
+            motor_on(21)
+            time.sleep(1)
+            motor_off(21)
+            time.sleep(1)
+            gpio.cleanup()
 
     return render_template('home.html')
 
