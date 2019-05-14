@@ -6,6 +6,8 @@ to move the robot and to pull the trigger on a nerf gun while aiming through the
 
 Note: I couldn't get it to run on the raspberry pi but separate they work. To run the website use main.py and to
 control the raspberry pi use bettertest.py
+
+look at SecurityWebsite in my github for an example of what this could have looked like
 """
 
 # this can't be run but main.py can be
