@@ -1,3 +1,5 @@
+# comments in raspimain.py
+
 from flask import Flask, render_template, Response, redirect, url_for, request
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 import hashlib

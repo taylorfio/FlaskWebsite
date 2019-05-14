@@ -1,9 +1,9 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} <!-- extends off of the layout page -->
 {% block content %}
    <div class="login">
        <h1>Please login</h1>
        <br>
-       <form action="" method="post">
+       <form action="" method="post"> <!-- creates text input for login and submit input-->
            <input type="text" placeholder="Username" name="username" value="{{request.form.username }}">
            <input type="password" placeholder="Password" name="password" value="{{request.form.password }}">
            <input class="btn btn-default" type="submit" value="Login">

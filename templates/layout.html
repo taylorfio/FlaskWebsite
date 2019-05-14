@@ -2,8 +2,8 @@
 <html lang="en">
  <head>
      <title>Flask app</title>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- auto scales the website -->
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"> <!-- calls the css file -->
  </head>
   <body>
     <header>
@@ -11,6 +11,7 @@
         <h1 class="logo">Taylor's web app</h1>
         <strong><nav>
           <ul class="menu">
+              <!-- displays the links to the other pages  -->
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>

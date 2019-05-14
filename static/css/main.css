@@ -21,6 +21,7 @@ header h1.logo {
   text-transform: uppercase;
   float: left;
 }
+/* creates a colour changing logo when you hover over it */
 header h1.logo:hover {
   color: #69e059;
   -webkit-animation:colorchange 20s infinite alternate;
@@ -115,6 +116,7 @@ h3 {
 .menu li a {
   color: #fff;
 }
+/* changes colour to green when hovering over it */
 .menu li a:hover {
   color: #69e059;
   text-decoration: none;
