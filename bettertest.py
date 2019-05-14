@@ -35,9 +35,9 @@ def motor_on():
     gpio.setup(21, gpio.OUT)
     gpio.output(21, gpio.HIGH)  # Turn relay motor on
     time.sleep(1)
-    gpio.output(pin, gpio.LOW)  # Turn relay motor off
+    gpio.output(21, gpio.LOW)  # Turn relay motor off
     time.sleep(1)
-
+    gpio.cleanup()
 
 
 x = True

@@ -14,7 +14,6 @@ login_manager.init_app(app)
 
 def init():
     gpio.setmode(gpio.BCM)
-    gpio.setup(21, gpio.OUT)
     gpio.setup(17, gpio.OUT)
     gpio.setup(22, gpio.OUT)
     gpio.setup(23, gpio.OUT)
@@ -41,12 +40,14 @@ def reverse(sec):
     gpio.cleanup()
 
 
-def motor_on(pin):
-    gpio.output(pin, gpio.HIGH)  # Turn motor on
-
-
-def motor_off(pin):
-    gpio.output(pin, gpio.LOW)  # Turn motor off
+def motor_on():
+    gpio.setmode(gpio.BCM)
+    gpio.setup(21, gpio.OUT)
+    gpio.output(21, gpio.HIGH)  # Turn relay motor on
+    time.sleep(1)
+    gpio.output(21, gpio.LOW)  # Turn relay motor off
+    time.sleep(3)
+    gpio.cleanup()
 
 
 @login_manager.user_loader
@@ -107,11 +108,7 @@ def home():
         elif request.form['right']:
             forward(1)
         elif request.form['fire']:
-            motor_on(21)
-            time.sleep(1)
-            motor_off(21)
-            time.sleep(1)
-            gpio.cleanup()
+            motor_on()
 
     return render_template('home.html')
 
@@ -140,4 +137,4 @@ if __name__ == '__main__':
     app.config["SECRET_KEY"] = 'ITSASECRET'
     app.run(host='0.0.0.0', debug=True)
 
-# use command ./ngrok http 5000
+# note: use command ./ngrok http 5000 to host with ngrok
