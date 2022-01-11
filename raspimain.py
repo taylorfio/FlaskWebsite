@@ -3,14 +3,8 @@ The purpose of this website is to demonstrate my understanding of Flask, open-cv
 
 This project is a webapp that runs from local server on a raspberry pi and takes inputs to control motors
 to move the robot and to pull the trigger on a nerf gun while aiming through the live feed from a camera.
-
-Note: I couldn't get it to run on the raspberry pi but separate they work. To run the website use main.py and to
-control the raspberry pi use bettertest.py
-
-look at SecurityWebsite in my github for an example of what this could have looked like
 """
 
-# this can't be run but main.py can be
 from flask import Flask, render_template, Response, redirect, url_for, request
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user
 import hashlib
